@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <title>Why Live Here</title>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <style>/* The side navigation menu */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+        
+       #map {
+        height: 400px;
+        width: 100%;
+       } 
+            .slide{
+                height: 40px;
+        width: 90%;
+            }
+    
+
+
+        
+        </style>
+    </head>
+    <body>
+      <div id="mySidenav" class="sidenav">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="#" onclick="plotRemove('bus')">Bus</a>
+          <a href="#" onclick="plotRemove('crime')" >Crime</a>
+          <a href="#" onclick="plotRemove('gp')" >GP Surgeries</a>
+          <a href="#" onclick="plotRemove('he')">Higher Education Colleges</a>
+          <a href="#" onclick="plotRemove('hos')">Hospitals</a>
+          <a href="#" onclick="plotRemove('ns')">Nurserys/schools</a>
+          <a href="#" onclick="plotRemove('rail')">Rail</a>
+          <a href="#" onclick="plotRemove('tube')">Tube/Metro</a>
+      </div>
+<!-- Use any element to open the sidenav -->
+      <span onclick="openNav()">open</span>
+       <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+      <div id="map">        
+      </div>
+      <div >     
+        <input class = 'slide' type="range" min="0" max="10" value="1" step="1" onchange="circlePlot(this.value)" />
+        <span id="range">1</span>
+      </div>    
+        <script>
+            /*
+            Global Vars
+            */
+             var request
+            var busMarker, i;
+            var busMarkers = [];
+            var buslocations; 
+            var busInfo; 
+            var crimeMarker, i;
+            var crimeMarkers = [];
+            var crimelocations; 
+            var crimeInfo;
+            var gpMarker, i;
+            var gpMarkers = [];
+            var gplocations; 
+            var gpInfo;
+            var heMarker, i;
+            var heMarkers = [];
+            var helocations; 
+            var heInfo;
+            var hosMarker, i;
+            var hosMarkers = [];
+            var hoslocations; 
+            var hosInfo;
+            var nsMarker, i;
+            var nsMarkers = [];
+            var nslocations; 
+            var nsInfo;
+            var railMarker, i;
+            var railMarkers = [];
+            var raillocations; 
+            var railInfo;
+            var tubeMarker, i;
+            var tubeMarkers = [];
+            var tubelocations; 
+            var tubeInfo;
+            var bus = 0; 
+            var crime = 0; 
+            var gpSurgeries = 0; 
+            var hospitals = 0; 
+            var higherEducationColleges = 0; 
+            var hospitals = 0; 
+            var nurserysschools = 0; 
+            var rail = 0;
+            var tube = 0; 
+            var map;
+            var mainPin = {lat: -33.8688, lng: 151.2195}; 
+            var circleRadDefault = 1; 
+            var cityCircle ; 
+            
+            var dummy = []; 
+            
+            var busResults; 
+             var degreeAdjustment; 
+            
+            
+          //var marker; 
+           var markers;
+           var locations; 
+          // var infowindow;
+      
+
+           var results;
+
+            /*
+            Initialize map function 
+            */ 
+            function initAutocomplete() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -33.8688, lng: 151.2195},
+                zoom: 13,
+                mapTypeId: 'roadmap'
+                });
+
+                // Create the search box and link it to the UI element.
+                var input = document.getElementById('pac-input');
+                var searchBox = new google.maps.places.SearchBox(input);
+                map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+                // Bias the SearchBox results towards current map's viewport.
+                map.addListener('bounds_changed', function() {
+                    searchBox.setBounds(map.getBounds());
+                });
+
+                var markers = [];
+                // Listen for the event fired when the user selects a prediction and retrieve
+                // more details for that place.
+                searchBox.addListener('places_changed', function() {
+                    var places = searchBox.getPlaces();
+
+                        if (places.length == 0) {
+                            return;
+                        }
+
+                    // Clear out the old markers.
+                    markers.forEach(function(marker) {
+                        marker.setMap(null);
+                    });
+                    markers = [];
+
+                // For each place, get the icon, name and location.
+                var bounds = new google.maps.LatLngBounds();
+                places.forEach(function(place) {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                        }
+                /*
+                Set main pin 
+                */ 
+                mainPin = place.geometry.location ; 
+
+                /*
+               clear and plot raidus 
+               */
+                circlePlot(circleRadDefault); 
+
+                var icon = {
+                  url: place.icon,
+                  size: new google.maps.Size(71, 71),
+                  origin: new google.maps.Point(0, 0),
+                  anchor: new google.maps.Point(17, 34),
+                  scaledSize: new google.maps.Size(25, 25)
+                };
+
+                // Create a marker for each place.
+                markers.push(new google.maps.Marker({
+                  map: map,
+                  icon: icon,
+                  title: place.name,
+                  position: place.geometry.location
+                }));
+
+                if (place.geometry.viewport) {
+                  // Only geocodes have viewport.
+                  bounds.union(place.geometry.viewport);
+                } else {
+                  bounds.extend(place.geometry.location);
+                }
+              });
+              map.fitBounds(bounds);   
+            });
+            /*
+            First load plot 
+            */ 
+            circlePlot(circleRadDefault);  
+                
+            // check and replot markers 
+              
+          }   
+
+        /*
+         plot remove bus 
+        */
+       function plotRemove(type){
+           if(type == "bus" && bus == 0){ 
+               plotMarker("bus"); 
+                bus = 1; 
+           } else if(type == "bus" && bus == 1){
+               removeMarkers("bus"); 
+               bus = 0; 
+           } else if(type == "crime"  && crime == 0){
+               plotMarker("crime");
+               crime = 1; 
+           } else if(type == "crime" && crime == 1){
+               removeMarkers("crime"); 
+               crime = 0;    
+            } else if (type == "gp" && gpSurgeries == 0){
+                plotMarker("gp");
+                gpSurgeries = 1; 
+            } else if (type == "gp" && gpSurgeries == 1){
+                 removeMarkers("gp");
+                 gpSurgeries = 0; 
+            } else if(type == "hos" && hospitals == 0){
+                plotMarker("hos");
+                hospitals = 1;  
+            } else if(type == "hos" && hospitals == 1){
+                removeMarkers("hos");
+                hospitals = 0;      
+            } else if (type == "he" && higherEducationColleges == 0){
+                plotMarker("he");
+                higherEducationColleges = 1;
+            } else if (type == "he" && higherEducationColleges == 1){
+                removeMarkers("he");
+                higherEducationColleges = 0;
+            } else if(type == "ns" && nurserysschools ==0){
+                plotMarker("ns");
+                nurserysschools = 1;
+            }else if(type == "ns" && nurserysschools ==1){
+                removeMarkers("ns");
+                nurserysschools = 0;
+            }  else if(type == "rail" && rail ==0){
+                plotMarker("rail");
+                rail = 1;
+            }else if(type == "rail" && rail ==1){
+                removeMarkers("rail");
+                rail = 0;
+            }else if(type == "tube" && tube ==0){
+                plotMarker("tube");
+                tube = 1;
+            }else if(type == "tube" && tube ==1){
+                removeMarkers("tube");
+                tube = 0;
+            }
+       }
+
+            
+    /*
+    replot markers after the circle is resized. 
+    */ 
+     function resizePlot(){
+         
+         
+         
+            if( bus == 1){ 
+                removeMarkers("bus");
+               plotMarker("bus"); 
+           } else if( crime == 1){
+               removeMarkers("crime");
+               plotMarker("crime");
+           } else if (gpSurgeries == 1){
+                removeMarkers("gpSurgeries");
+                plotMarker("gp");
+            } else if( hospitals == 1){
+                removeMarkers("hos");
+                plotMarker("hos");
+            } else if (higherEducationColleges == 1){
+                removeMarkers("he");
+                plotMarker("he");
+            }  else if(nurserysschools ==1){
+                removeMarkers("ns");
+                plotMarker("ns");
+            } else if( rail ==1){
+                 removeMarkers("rail");
+                plotMarker("rail");
+            }else if( tube ==1){
+                removeMarkers("tube");
+                plotMarker("tube");
+            }   
+     }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        /*
+        Plot Markers function 
+        */
+       function plotMarker(type){ 
+           
+           /*
+           Decision on marker to use 
+           */ 
+           if(type == "bus"){
+               marker = busMarker; 
+               markers = busMarkers
+               locations = buslocations; 
+               infowindow = buslocations;
+               results = busResults; 
+               
+           } else if (type == "crime"){
+               marker = crimeMarker; 
+               markers = crimeMarkers;
+               locations = crimelocations; 
+               infowindow = crimeInfo; 
+                
+               
+           } else if (type == "gp"){
+               marker = gpMarker; 
+               markers = gpMarkers; 
+               locations = gplocations; 
+               infowindow = gpInfo; 
+               
+           }else if (type == "he"){
+               marker = heMarker; 
+               markers = heMarkers; 
+               locations = helocations; 
+               infowindow = heInfo;  
+               
+           }else if (type == "hos"){
+               marker = hosMarker; 
+               markers = hosMarkers; 
+               locations = hoslocations; 
+               infowindow = hosInfo; 
+               
+           }else if (type == "ns"){
+               marker = nsMarker; 
+               markers = nsMarkers; 
+               locations = nslocations; 
+               infowindow = nsInfo; 
+              
+           }else if (type == "rail"){
+               marker = railMarker; 
+               markers = railMarkers; 
+               locations = raillocations; 
+               infowindow = railInfo;
+             
+           }else if (type == "tube"){
+               marker = tubeMarker; 
+               markers = tubeMarkers; 
+               locations = tubelocations; 
+               infowindow = tubeInfo;
+               
+           }
+           
+          
+            
+           
+            degreeAdjustment =  (cityCircle.getRadius() * 0.0089831116499/1000);
+        
+           
+          
+           
+           
+            if(type == 'ns'){
+                
+                
+                    var pyrmont = new google.maps.LatLng(cityCircle.getCenter().lat(),  cityCircle.getCenter().lng());
+
+                      var request = {
+                        location: pyrmont,
+                        radius: cityCircle.getRadius(),
+                        type: 'school'
+                      };
+                    var service = new google.maps.places.PlacesService(map);
+                    service.nearbySearch(request, callback);  
+               
+               }
+           
+           else if(type == 'he'){
+               
+                var pyrmont = new google.maps.LatLng(cityCircle.getCenter().lat(),  cityCircle.getCenter().lng());
+
+                      var request = {
+                        location: pyrmont,
+                        radius: cityCircle.getRadius(),
+                        type: 'university'
+                      };
+                    var service = new google.maps.places.PlacesService(map);
+                    service.nearbySearch(request, callback);  
+               
+              } 
+           
+           else if(type == "bus"){
+               
+              SpinnerPlugin.activityStart(); 
+               
+               var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
+            //parseFloat($('#lng').val())
+           //console.log(degreeAdjustment)
+            results = client.invokeApi('busstops', {
+                    method: 'get',
+                    parameters: {
+                                lat: cityCircle.getCenter().lat() , 
+                                lang: cityCircle.getCenter().lng() ,  
+                                radius: cityCircle.getRadius()/1000
+                                }
+            }).done(function(results) {
+                
+               // alert(JSON.stringify(results))
+                
+              infowindow = new google.maps.InfoWindow();       
+            for(var i = 0; i< results.result.length; i++){
+                var marker = new google.maps.Marker({
+                     
+                 position: new google.maps.LatLng( results.result[i].Lat, results.result[i].lang),
+                map: map
+                });   
+                markers.push(marker);
+               
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                        infowindow.setContent(results.result[i].title);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+                        
+             }  //end of loop  
+                
+                markers = dummy ; 
+                
+                SpinnerPlugin.activityStop();
+                
+            }, function (err) {
+                alert("Error: " + err);
+                  SpinnerPlugin.activityStop();
+                });  
+               
+              } else if (type == 'rail'){
+
+              var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
+            //parseFloat($('#lng').val())
+           //console.log(degreeAdjustment)
+            results = client.invokeApi('train', {
+                    method: 'get',
+                    parameters: {
+                                lat: cityCircle.getCenter().lat() , 
+                                lang: cityCircle.getCenter().lng() ,  
+                                radius: cityCircle.getRadius()/1000
+                                }
+            }).done(function(results) {
+                
+            //    alert(JSON.stringify(results))
+                
+              infowindow = new google.maps.InfoWindow();       
+            for(var i = 0; i< results.result.length; i++){
+                var marker = new google.maps.Marker({
+                     
+                 position: new google.maps.LatLng( results.result[i].Lat, results.result[i].lang),
+                map: map
+                });   
+                markers.push(marker);
+               
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                        infowindow.setContent(results.result[i].title);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+                        
+             }  //end of loop  
+            }, function (err) {
+                alert("Error: " + err);
+                });  
+
+       }else if (type == 'crime'){
+           
+           
+            var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
+            //parseFloat($('#lng').val())
+           console.log(degreeAdjustment)
+            client.invokeApi('test', {
+                    method: 'get',
+                    parameters: {
+                                lat: cityCircle.getCenter().lat() , 
+                                lang: cityCircle.getCenter().lng() ,  
+                                radius: cityCircle.getRadius()/1000
+                                }
+            }).done(function(results) {
+               
+            navigator.notification.alert(
+           JSON.stringify(results),  // message
+              null,         // callback
+             'Game Over',            // title
+               'Done'                  // buttonName
+           );
+                
+                
+                
+               // alert(JSON.stringify(results)); 
+            }, function(error) {
+                console.log(error);
+            });   
+       }else if (type == 'gp'){
+           
+              var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
+            //parseFloat($('#lng').val())
+           //console.log(degreeAdjustment)
+            results = client.invokeApi('gp', {
+                    method: 'get',
+                    parameters: {
+                                lat: cityCircle.getCenter().lat() , 
+                                lang: cityCircle.getCenter().lng() ,  
+                                radius: cityCircle.getRadius()/1000
+                                }
+            }).done(function(results) {
+                
+            //    alert(JSON.stringify(results))
+                
+              infowindow = new google.maps.InfoWindow();       
+            for(var i = 0; i< results.result.length; i++){
+                var marker = new google.maps.Marker({
+                     
+                 position: new google.maps.LatLng( results.result[i].Lat, results.result[i].lang),
+                map: map
+                });   
+                markers.push(marker);
+               
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                        infowindow.setContent(results.result[i].title);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+                        
+             }  //end of loop  
+            }, function (err) {
+                alert("Error: " + err);
+                });  
+           
+        }  else if (type == 'tube'){
+            var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
+            //parseFloat($('#lng').val())
+           //console.log(degreeAdjustment)
+            results = client.invokeApi('tube', { 
+                    method: 'get',
+                    parameters: {
+                                lat: cityCircle.getCenter().lat() , 
+                                lang: cityCircle.getCenter().lng() ,  
+                                radius: cityCircle.getRadius()/1000
+                                }
+            }).done(function(results) {
+                
+            //    alert(JSON.stringify(results))
+                
+              infowindow = new google.maps.InfoWindow();       
+            for(var i = 0; i< results.result.length; i++){
+                var marker = new google.maps.Marker({
+                     
+                 position: new google.maps.LatLng( results.result[i].Lat, results.result[i].lang),
+                map: map
+                });   
+                markers.push(marker);
+               
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                        infowindow.setContent(results.result[i].title);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+                        
+             }  //end of loop  
+            }, function (err) {
+                alert("Error: " + err);
+                });                
+        }else if (type == 'hos'){
+           var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
+            //parseFloat($('#lng').val())
+           //console.log(degreeAdjustment)
+            results = client.invokeApi('hospital', { 
+                    method: 'get',
+                    parameters: {
+                                lat: cityCircle.getCenter().lat() , 
+                                lang: cityCircle.getCenter().lng() ,  
+                                radius: cityCircle.getRadius()/1000
+                                }
+            }).done(function(results) {
+                
+            //    alert(JSON.stringify(results))
+                
+              infowindow = new google.maps.InfoWindow();       
+            for(var i = 0; i< results.result.length; i++){
+                var marker = new google.maps.Marker({
+                     
+                 position: new google.maps.LatLng( results.result[i].Lat, results.result[i].lang),
+                map: map
+                });   
+                markers.push(marker);
+               
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                        infowindow.setContent(results.result[i].title);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+                        
+             }  //end of loop  
+            }, function (err) {
+                alert("Error: " + err);
+                });           
+        }
+           
+ 
+           function callback(results, status) {
+            if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                console.error(status);
+                return;
+                }
+            for (var i = 0, result; result = results[i]; i++) {
+                    addMarker(result);
+                }
+                }
+
+           function addMarker(place) {
+                    var marker1 = new google.maps.Marker({
+                map: map,
+            position: place.geometry.location,
+            icon: {
+                    url: 'https://developers.google.com/maps/documentation/javascript/images/circle.png',
+                    anchor: new google.maps.Point(10, 10),
+                    scaledSize: new google.maps.Size(10, 17)
+                }
+                        });
+    
+            markers.push(marker1); 
+
+            google.maps.event.addListener(marker1, 'click', function() {
+                        service.getDetails(place, function(result, status) {
+                        if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                        console.error(status);
+                        return;
+                        }
+        
+        
+            var infowindows = new google.maps.InfoWindow({
+         
+                });
+        infowindows.setContent(result.name);
+        infowindows.open(map, marker1);
+                        });
+                    });
+           }
+     }
+
+            function removeMarkers(type){
+                
+                /*Decision for marker removal*/
+                if(type == "bus"){ 
+                    markers = busMarkers;
+                } else if(type == "crime"){
+                    markers = crimeMarkers;
+              } else if(type == "gp"){
+                    markers = gpMarkers;
+              } else if(type == "he"){
+                    markers = heMarkers; 
+              }else if(type == "hos"){
+                    markers = hosMarkers; 
+              }else if(type == "ns"){
+                    markers = nsMarkers; 
+              }else if(type == "rail"){
+                    markers = railMarkers; 
+              }else if(type == "tube"){
+                    markers = tubeMarkers; 
+              } 
+            
+                for(i=0; i<markers.length; i++){
+                    markers[i].setMap(null);
+                }
+            }
+
+            /*
+            Plot the circle 
+            */
+            function circlePlot(radius){
+                if(cityCircle != null){
+                cityCircle.setMap(null);
+                } 
+
+                cityCircle = new google.maps.Circle({
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#FF0000',
+                    fillOpacity: 0.35,
+                    map: map,
+                    center: mainPin,
+                    radius: 1000 * radius
+                });
+            /*
+             Show radius
+            */
+            document.getElementById("range").innerHTML=radius+'KM';
+                
+                
+              resizePlot(); 
+            } 
+        </script>
+        <script async defer src="https://maps.googleapis.com/maps/api/jskey=AIzaSyBgBa7jgvfzjmnPTrjmcA3VCygKZlt9z_c&callback=initMap">
+        </script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script>
+            /* Set the width of the side navigation to 250px */
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+            /* Set the width of the side navigation to 0 */
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+            /*new value show - will need deleted eventually */ 
+            function showValue(newValue){
+               document.getElementById("range").innerHTML=newValue;
+            }
+        </script>  
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgBa7jgvfzjmnPTrjmcA3VCygKZlt9z_c&libraries=places&callback=initAutocomplete" async defer>
+        </script>
+    </body>
+</html>
