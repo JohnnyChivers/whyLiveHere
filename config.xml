@@ -9,7 +9,6 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <plugin name="azure-mobile-apps-client" />
      <plugin name="cordova-plugin-dialogs" />
     <plugin name="cordova-plugin-spinner"/>
 </widget>
