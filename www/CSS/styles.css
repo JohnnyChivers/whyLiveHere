@@ -36,6 +36,16 @@
     margin-left: 50px;
 }
 
+/*why live here title */
+
+.object4{
+    padding-bottom:3% ; 
+}
+
+.content{
+    background-color: blue; 
+}
+
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 #main {
     transition: margin-left .5s;
