@@ -353,18 +353,7 @@
                 plotMarker("tube");
             }   
      }
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
             
         /*
         Plot Markers function 
@@ -437,6 +426,8 @@
            
             if(type == 'ns'){
                 
+                SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
+                
                 
                     var pyrmont = new google.maps.LatLng(cityCircle.getCenter().lat(),  cityCircle.getCenter().lng());
 
@@ -452,6 +443,8 @@
            
            else if(type == 'he'){
                
+               SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
+               
                 var pyrmont = new google.maps.LatLng(cityCircle.getCenter().lat(),  cityCircle.getCenter().lng());
 
                       var request = {
@@ -466,7 +459,7 @@
            
            else if(type == "bus"){
                
-              SpinnerPlugin.activityStart(); 
+              SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
                
                var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
             //parseFloat($('#lng').val())
@@ -510,6 +503,8 @@
                 });  
                
               } else if (type == 'rail'){
+                  
+                  SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
 
               var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
             //parseFloat($('#lng').val())
@@ -548,6 +543,8 @@
 
        }else if (type == 'crime'){
            
+           SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
+           
            
             var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
             //parseFloat($('#lng').val())
@@ -569,12 +566,16 @@
            );
                 
                 
-                
+                   SpinnerPlugin.activityStop();
                // alert(JSON.stringify(results)); 
             }, function(error) {
+                SpinnerPlugin.activityStop();
                 console.log(error);
+                   
             });   
        }else if (type == 'gp'){
+           
+        SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
            
               var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
             //parseFloat($('#lng').val())
@@ -606,12 +607,16 @@
                     }
                 })(marker, i));
                         
+              SpinnerPlugin.activityStop();
              }  //end of loop  
             }, function (err) {
+                SpinnerPlugin.activityStop();
                 alert("Error: " + err);
                 });  
            
         }  else if (type == 'tube'){
+            
+            SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
             var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
             //parseFloat($('#lng').val())
            //console.log(degreeAdjustment)
@@ -641,12 +646,15 @@
                         infowindow.open(map, marker);
                     }
                 })(marker, i));
-                        
+                SpinnerPlugin.activityStop();
              }  //end of loop  
             }, function (err) {
+                SpinnerPlugin.activityStop();
                 alert("Error: " + err);
                 });                
         }else if (type == 'hos'){
+            
+            SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
            var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
             //parseFloat($('#lng').val())
            //console.log(degreeAdjustment)
@@ -676,9 +684,11 @@
                         infowindow.open(map, marker);
                     }
                 })(marker, i));
+                SpinnerPlugin.activityStop();
                         
              }  //end of loop  
             }, function (err) {
+                SpinnerPlugin.activityStop();
                 alert("Error: " + err);
                 });           
         }
@@ -722,6 +732,8 @@
         infowindows.open(map, marker1);
                         });
                     });
+               
+               SpinnerPlugin.activityStop(); // close of load
            }
      }
 
