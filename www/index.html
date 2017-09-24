@@ -426,7 +426,7 @@
            
             if(type == 'ns'){
                 
-                SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
+                 SpinnerPlugin.activityStart('Fetching Data...', 'Fetching Data...'); 
                 
                 
                     var pyrmont = new google.maps.LatLng(cityCircle.getCenter().lat(),  cityCircle.getCenter().lng());
@@ -443,7 +443,7 @@
            
            else if(type == 'he'){
                
-               SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
+                SpinnerPlugin.activityStart('Fetching Data...', 'Fetching Data...');  
                
                 var pyrmont = new google.maps.LatLng(cityCircle.getCenter().lat(),  cityCircle.getCenter().lng());
 
@@ -459,7 +459,7 @@
            
            else if(type == "bus"){
                
-              SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
+               SpinnerPlugin.activityStart('Fetching Data...', 'Fetching Data...'); 
                
                var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
             //parseFloat($('#lng').val())
@@ -543,7 +543,7 @@
 
        }else if (type == 'crime'){
            
-           SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
+           SpinnerPlugin.activityStart('Fetching Data...', 'Fetching Data...'); 
            
            
             var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
@@ -575,7 +575,7 @@
             });   
        }else if (type == 'gp'){
            
-        SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
+         SpinnerPlugin.activityStart('Fetching Data...', 'Fetching Data...'); 
            
               var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
             //parseFloat($('#lng').val())
@@ -616,7 +616,8 @@
            
         }  else if (type == 'tube'){
             
-            SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
+             SpinnerPlugin.activityStart('Fetching Data...', 'Fetching Data...'); 
+            
             var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
             //parseFloat($('#lng').val())
            //console.log(degreeAdjustment)
@@ -654,7 +655,8 @@
                 });                
         }else if (type == 'hos'){
             
-            SpinnerPlugin.activityStart(null, 'Fetching Data...'); 
+            SpinnerPlugin.activityStart('Fetching Data...', 'Fetching Data...'); 
+            
            var client = new WindowsAzure.MobileServiceClient('https://whylivehere.azurewebsites.net');
             //parseFloat($('#lng').val())
            //console.log(degreeAdjustment)
