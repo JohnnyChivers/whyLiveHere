@@ -4,66 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
         <title>Why Live Here</title>
-        <style>/* The side navigation menu */
-.sidenav {
-    height: 100%; /* 100% Full-height */
-    width: 0; /* 0 width - change this with JavaScript */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
-    top: 0;
-    left: 0;
-    background-color: #111; /* Black*/
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 60px; /* Place content 60px from the top */
-    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-}
-
-/* The navigation menu links */
-.sidenav a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 30px;
-    color: #818181;
-    display: block;
-    transition: 0.3s
-}
-
-/* When you mouse over the navigation links, change their color */
-.sidenav a:hover, .offcanvas a:focus{
-    color: #f1f1f1;
-}
-
-/* Position and style the close button (top right corner) */
-.sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-}
-
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-    transition: margin-left .5s;
-    padding: 20px;
-}
-
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
-}
-        
-       #map {
-        height: 400px;
-        width: 100%;
-       } 
-            .slide{
-                height: 40px;
-        width: 90%;
-            }
-
-        </style>
+        <link rel="stylesheet" href="CSS/styles.css">
     </head>
     <body>
       <div id="mySidenav" class="sidenav">
@@ -78,7 +19,7 @@
           <a href="#" onclick="plotRemove('tube')">Tube/Metro</a>
       </div>
 <!-- Use any element to open the sidenav -->
-        <div><span onclick="openNav()"> Filters  </span>  WhyLiveHere?  </div>
+        <div><span onclick="openNav()"><img src="Image/menu.png" alt="menu" style="width:25px;height:25px;"></span> <img src="Image/whybuyherelogo.png" alt="whyliveherelogo" style="width:25px;height:25px;">   WhyLiveHere?  </div>
        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
       
         
