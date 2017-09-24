@@ -12,6 +12,9 @@
         },
         "cordova-plugin-spinner": {
             "PACKAGE_NAME": "uk.co.WhyLiveHere"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "uk.co.WhyLiveHere"
         }
     },
     "dependent_plugins": {}

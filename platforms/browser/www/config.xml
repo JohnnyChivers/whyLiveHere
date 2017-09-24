@@ -10,5 +10,4 @@
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="*" />
-    <gap:plugin name="cordova-plugin-whitelist" />
 </widget>
