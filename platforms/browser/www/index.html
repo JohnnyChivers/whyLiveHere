@@ -4,28 +4,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
         <title>Why Live Here</title>
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         <style>/* The side navigation menu */
 .sidenav {
     height: 100%; /* 100% Full-height */
@@ -44,7 +22,7 @@
 .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 30px;
     color: #818181;
     display: block;
     transition: 0.3s
@@ -84,10 +62,7 @@
                 height: 40px;
         width: 90%;
             }
-    
 
-
-        
         </style>
     </head>
     <body>
@@ -103,9 +78,11 @@
           <a href="#" onclick="plotRemove('tube')">Tube/Metro</a>
       </div>
 <!-- Use any element to open the sidenav -->
-      <span onclick="openNav()">open</span>
+        <div><span onclick="openNav()"> Filters  </span>  WhyLiveHere?  </div>
        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-      <div id="map">        
+      
+        
+        <div id="map">        
       </div>
       <div >     
         <input class = 'slide' type="range" min="0" max="10" value="1" step="1" onchange="circlePlot(this.value)" />
