@@ -684,9 +684,11 @@
                         infowindow.open(map, marker);
                     }
                 })(marker, i));
-                SpinnerPlugin.activityStop();
+           
                         
              }  //end of loop  
+                
+                     SpinnerPlugin.activityStop();
             }, function (err) {
                 SpinnerPlugin.activityStop();
                 alert("Error: " + err);
