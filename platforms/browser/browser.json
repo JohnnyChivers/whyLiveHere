@@ -157,6 +157,30 @@
             "clobbers": [
                 "SpinnerPlugin"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+            "id": "cordova-plugin-dialogs.notification",
+            "pluginId": "cordova-plugin-dialogs",
+            "merges": [
+                "navigator.notification"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-dialogs/www/browser/notification.js",
+            "id": "cordova-plugin-dialogs.notification_browser",
+            "pluginId": "cordova-plugin-dialogs",
+            "merges": [
+                "navigator.notification"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-spinner/www/spinner-plugin.js",
+            "id": "cordova-plugin-spinner.SpinnerPlugin",
+            "pluginId": "cordova-plugin-spinner",
+            "clobbers": [
+                "SpinnerPlugin"
+            ]
         }
     ],
     "plugin_metadata": {
