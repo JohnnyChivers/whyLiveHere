@@ -20,10 +20,7 @@
           <a href="#" onclick="plotRemove('rail')">Rail</a>
           <a href="#" onclick="plotRemove('tube')">Tube/Metro</a>
       </div>
-        
-        <div class = 'All'>
-        
-        <div class="content" >
+        <div id="content" >
             <div id="left" style="width: 32%; float:left">
                 <div id="object1">
                     <span onclick="openNav()"><img src="Image/menu.png" alt="menu" style="width:25px;height:25px; padding-top: 10px"></span> 
@@ -41,11 +38,10 @@
         <div id="map">        
       </div>
       
-     <div id = "bar">     
         <input class = 'slide' type="range" min="0" max="10" value="1" step="1" onchange="circlePlot(this.value)" />
         <span id="range">1</span>
-      </div>    
-            </div>
+  
+    
         <script src="https://zumo.blob.core.windows.net/sdk/azure-mobile-apps-client.2.0.1.js"></script>
         <script>
             /*

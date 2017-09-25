@@ -46,12 +46,21 @@
     background-color: blue; 
 }
 
+
+
+.slide{
+        height: 100%;
+        width: 100%;
+            }
+
+#range{
+   float:right ; 
+}
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 #main {
     transition: margin-left .5s;
     padding: 20px;
 }
-
 
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
@@ -65,15 +74,17 @@
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
 }
-        
-       #map {
+
+#map {
         height: 400px;
         width: 100%;
-       } 
-            .slide{
-                height: 40px;
-        width: 90%;
-            }
+        border-top: 3px; 
+        border-top-style: solid;
+        border-top-color: darkgreen; 
+}
+    
+     } 
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
