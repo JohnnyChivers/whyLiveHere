@@ -38,8 +38,8 @@
         <div id="map">        
       </div>
       <div class = "bottom"> 
-        <input class = 'slide' type="range" min="0" max="10" value="1" step="1" onchange="circlePlot(this.value)" />
-        <span id="range">1</span>
+        <input class = 'slide' type="range" min="0.5" max="10" value="0.5" step="0.5" onchange="circlePlot(this.value)" />
+        <span id="range">0.5</span>
         </div>
     
         <script src="https://zumo.blob.core.windows.net/sdk/azure-mobile-apps-client.2.0.1.js"></script>
@@ -91,13 +91,20 @@
             var tube = 0; 
             var map;
             var mainPin = {lat: -33.8688, lng: 151.2195}; 
-            var circleRadDefault = 1; 
+            var circleRadDefault = 0.5; 
             var cityCircle ; 
             
             var dummy = []; 
             
             var busResults; 
              var degreeAdjustment; 
+            
+            // image to use 
+            
+            
+            
+            
+            
             
             
           //var marker; 
