@@ -7,8 +7,6 @@
         <link rel="stylesheet" href="CSS/styles.css">
     </head>
     <body>
-        
-        
       <div id="mySidenav" class="sidenav">
           <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
           <a href="#" onclick="plotRemove('bus')">Bus</a>
@@ -20,7 +18,11 @@
           <a href="#" onclick="plotRemove('rail')">Rail</a>
           <a href="#" onclick="plotRemove('tube')">Tube/Metro</a>
       </div>
-        <div id="content" >
+    
+        
+        <div class="content" >
+            
+            <div class = top>
             <div id="left" style="width: 25%; float:left">
                 <div id="object1">
                     <span onclick="openNav()"><img src="menu.png" alt="menu" style="width:25px;height:25px; padding-top: 10px"></span> 
@@ -32,15 +34,21 @@
                 </div>
             </div>
             <br style="clear:both;"/> 
+            </div>
 
-        <!-- Use any element to open the sidenav --> 
+                 <!-- Use any element to open the sidenav --> 
          <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-        <div id="map">        
+       
+        <div id="map">     
+        
       </div>
       <div class = "bottom"> 
         <input class = 'slide' type="range" min="0.5" max="10" value="0.5" step="0.5" onchange="circlePlot(this.value)" />
         <span id="range">0.5</span>
         </div>
+            
+            
+ 
     
         <script src="https://zumo.blob.core.windows.net/sdk/azure-mobile-apps-client.2.0.1.js"></script>
         <script>
